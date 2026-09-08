@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AICinK 이러닝 - AI와 문화콘텐츠로 실무를 완성하다</title>
+  <title>AICinK EDU - AI와 문화콘텐츠로 실무를 완성하다</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome -->
@@ -90,13 +90,13 @@
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
   <!-- ========================================================================= -->
-  <!-- 중앙 고급 보안 모달 레이어 (첨부 이미지 디자인 1:1 구현) -->
+  <!-- 중앙 고급 보안 모달 레이어 (시그니처 블루) -->
   <!-- ========================================================================= -->
   <div id="password-overlay" class="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white rounded-[32px] p-8 max-w-[400px] w-full shadow-2xl border border-slate-100 text-center animate-fade-in relative">
       
-      <!-- 상단 라운드 자물쇠 아이콘 -->
-      <div class="w-20 h-20 bg-[#008080] rounded-[24px] flex items-center justify-center text-white text-3xl mx-auto mb-6 shadow-lg shadow-[#008080]/30">
+      <!-- 상단 블루 자물쇠 아이콘 -->
+      <div class="w-20 h-20 bg-[#0055d2] rounded-[24px] flex items-center justify-center text-white text-3xl mx-auto mb-6 shadow-lg shadow-blue-600/30">
         <i class="fa-solid fa-lock"></i>
       </div>
 
@@ -114,7 +114,7 @@
             type="password" 
             id="password-input" 
             placeholder="비밀번호" 
-            class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:border-[#008080] focus:ring-2 focus:ring-[#008080]/20 transition shadow-sm"
+            class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:border-[#0055d2] focus:ring-2 focus:ring-[#0055d2]/20 transition shadow-sm"
             required
             autofocus
           />
@@ -128,7 +128,7 @@
         <!-- 로그인/접속 버튼 -->
         <button 
           type="submit" 
-          class="w-full py-3.5 bg-[#008080] hover:bg-[#006666] text-white font-bold text-base rounded-2xl shadow-lg shadow-[#008080]/25 transition transform active:scale-[0.98] mt-2"
+          class="w-full py-3.5 bg-[#0055d2] hover:bg-[#0040a0] text-white font-bold text-base rounded-2xl shadow-lg shadow-blue-600/25 transition transform active:scale-[0.98] mt-2"
         >
           접속하기
         </button>
@@ -144,7 +144,6 @@
 
   <!-- 보안 검증 자바스크립트 -->
   <script>
-    // 인증 확인 및 초기화
     (function checkAuth() {
       if (document.cookie.split(';').some((item) => item.trim().startsWith('auth_passed=true'))) {
         const overlay = document.getElementById('password-overlay');
@@ -152,13 +151,11 @@
       }
     })();
 
-    // 비밀번호 해시 생성 함수 (SHA-256)
     async function hashPassword(str) {
       const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
     }
 
-    // 비밀번호 확인 로직
     async function verifyPassword(event) {
       event.preventDefault();
       const input = document.getElementById('password-input').value;
@@ -676,7 +673,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <span class="text-blue-300 text-sm font-semibold tracking-wide">AI와 디지털 크리에이티브를 배우는 가장 실무적인 방법</span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">AICinK edu portal</h2>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">AICinK e-Learning</h2>
         </div>
         <div class="flex items-center gap-4">
           <button onclick="switchView('player')" class="px-8 py-4 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-lg rounded-xl shadow-xl transition transform hover:scale-105 flex items-center gap-3">
