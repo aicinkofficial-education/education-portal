@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AICinK 이러닝 - AI와 문화콘텐츠로 실무를 완성하다</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Google Fonts (Pretendard & Poppins) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#0055d2',
+              darkblue: '#002f7a',
+              navy: '#0b1938',
+              accent: '#2563eb',
+              sky: '#38bdf8',
+              cyan: '#06b6d4',
+              teal: '#0d9488',
+              gold: '#f59e0b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+    
+    /* 애니메이션 및 게이지 효과 */
+    @keyframes pulse-slow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .animate-pulse-slow {
+      animation: pulse-slow 3s infinite ease-in-out;
+    }
+
+    @keyframes rotate-needle {
+      0% { transform: rotate(-40deg); }
+      50% { transform: rotate(35deg); }
+      100% { transform: rotate(-40deg); }
+    }
+    .needle-anim {
+      transform-origin: bottom center;
+      animation: rotate-needle 4s ease-in-out infinite;
+    }
+
+    /* 토끼 스켈레탈 애니메이션 움직임 효과 */
+    @keyframes skeletal-sway {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      25% { transform: rotate(-3deg) translateY(-4px); }
+      75% { transform: rotate(3deg) translateY(2px); }
+    }
+    .skeletal-char {
+      animation: skeletal-sway 2.4s ease-in-out infinite;
+      transform-origin: 50% 80%;
+    }
+
+    /* 커스텀 스크롤바 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+
+  <!-- Top Announcement Bar (제인쌤 워크숍 연동 안내 배너) -->
+  <aside aria-label="JANE SSAM 라이브 워크숍 바로가기 안내" class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white text-xs md:text-sm py-2 px-4 shadow-sm border-b border-blue-900/50 flex justify-between items-center z-50 relative">
+    <div class="max-w-7xl mx-auto w-full flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="bg-amber-400 text-slate-900 text-[11px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">NEW</span>
+        <span class="font-medium text-slate-200">AICinK AI-그래픽스 융합기술 연구센터 포털 오픈! 실시간 피드백은 <strong class="text-amber-300 font-bold">JANE SSAM 라이브 워크숍</strong>에서 함께합니다.</span>
+      </div>
+      <div class="flex items-center space-x-4 text-xs font-semibold">
+        <button onclick="switchView('portal')" class="hover:text-amber-300 transition flex items-center gap-1">
+          <i class="fa-solid fa-house"></i> 포털 메인
+        </button>
+        <span class="text-slate-600">|</span>
+        <button onclick="switchView('player')" class="hover:text-amber-300 transition flex items-center gap-1">
+          <i class="fa-solid fa-play-circle text-sky-400"></i> 이러닝 플레이어 체험
+        </button>
+        <span class="text-slate-600">|</span>
+        <a href="https://edu.aicink.co.kr" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-chalkboard-user"></i> 제인쌤 워크숍 접속
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 1. 이러닝 포털 뷰 (학습사이트.png 구현 모드) -->
+  <!-- ========================================================================= -->
+  <div id="view-portal" class="block">
+    <!-- Main Header -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center gap-10">
+          <a href="#" onclick="switchView('portal')" class="flex items-center gap-2 group">
+            <div class="text-3xl font-extrabold text-blue-700 tracking-tight font-poppins flex items-center">
+              AICin<span class="text-blue-900 font-black">K</span>
+            </div>
+          </a>
+          <!-- Navigation Menus -->
+          <nav class="hidden md:flex items-center space-x-8 text-[16px] font-semibold text-slate-700">
+            <a href="#courses" class="hover:text-blue-600 transition">추천과정</a>
+            <a href="#courses" class="hover:text-blue-600 transition flex items-center gap-1.5">
+              이러닝 과정 <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+            </a>
+            <a href="#why-aicink" class="hover:text-blue-600 transition">AI 활용</a>
+            <a href="#env-section" class="hover:text-blue-600 transition">학습지원</a>
+            <a href="#process-section" class="hover:text-blue-600 transition">고객센터</a>
+          </nav>
+        </div>
+
+        <!-- Right Buttons -->
+        <div class="flex items-center space-x-3">
+          <button onclick="alert('로그인 팝업 준비 중입니다. 먼저 이러닝 플레이어 체험을 즐겨보세요!')" class="px-5 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 rounded-lg hover:bg-slate-100 transition">
+            로그인
+          </button>
+          <button onclick="alert('회원가입 후 모든 강의를 무료로 체험할 수 있습니다.')" class="px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition">
+            회원가입
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section (대형 일러스트와 배너 영역) -->
+    <section class="relative bg-gradient-to-b from-blue-50 via-indigo-50/40 to-white pt-10 pb-16 overflow-hidden border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          <!-- Left Text Area -->
+          <div class="lg:col-span-6 space-y-6 z-10">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-800 text-xs sm:text-sm font-bold tracking-wide">
+              <span>AI × 문화콘텐츠 × NCS</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-slate-900 leading-[1.18] tracking-tight">
+              <span class="text-blue-600">AI로 배우고,</span><br>
+              실무로 완성하는<br>
+              문화콘텐츠 <span class="text-blue-800 underline decoration-blue-400 decoration-4 underline-offset-8">이러닝</span>
+            </h1>
+
+            <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-xl font-normal">
+              게임그래픽 · 캐릭터디자인 · UI/UX · 디지털콘텐츠 · 생성형 AI<br class="hidden sm:block">
+              실무교육 콘텐츠로 전공자와 실무자의 역량을 단숨에 업그레이드합니다.
+            </p>
+
+            <div class="flex flex-wrap gap-4 pt-2">
+              <button onclick="switchView('player')" class="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition transform hover:-translate-y-0.5 text-base">
+                <span>지금 학습 시작하기</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+              </button>
+              <button onclick="document.getElementById('courses').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-blue-700 border-2 border-blue-200 font-bold rounded-xl shadow-sm transition text-base">
+                <span>과정 둘러보기</span>
+                <i class="fa-solid fa-play text-xs text-blue-600"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Hero Illustration Banner -->
+          <div class="lg:col-span-6 relative">
+            <div class="relative rounded-3xl overflow-hidden bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-400 p-1 shadow-2xl">
+              <!-- Visual Content Box -->
+              <div class="relative bg-slate-900 rounded-[22px] overflow-hidden min-h-[380px] sm:min-h-[440px] flex items-center justify-center p-6 text-white text-center">
+                <!-- Decorative Glow -->
+                <div class="absolute -top-20 -right-20 w-72 h-72 bg-blue-500/30 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 w-full flex flex-col items-center">
+                  <!-- AI Robot & Tablet Mockup Graphic -->
+                  <div class="w-full max-w-md bg-slate-800/80 backdrop-blur-md rounded-2xl border border-blue-400/30 p-5 shadow-2xl mb-4 text-left">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-700/60 mb-4">
+                      <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+                        <span class="text-xs text-slate-300 font-mono ml-2">AICinK Smart Canvas</span>
+                      </div>
+                      <span class="text-[11px] bg-blue-600/60 text-blue-200 px-2 py-0.5 rounded font-bold">NCS 레벨 4</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-center text-xs">
+                      <div class="bg-slate-900/90 p-3 rounded-lg border border-slate-700">
+                        <i class="fa-solid fa-robot text-sky-400 text-xl mb-1"></i>
+                        <div class="font-bold text-slate-200">생성형 AI 연동</div>
+                        <div class="text-[10px] text-slate-400">프롬프트 최적화</div>
+                      </div>
+                      <div class="bg-slate-900/90 p-3 rounded-lg border border-slate-700">
+                        <i class="fa-solid fa-gamepad text-indigo-400 text-xl mb-1"></i>
+                        <div class="font-bold text-slate-200">2D 게임엔진</div>
+                        <div class="text-[10px] text-slate-400">아틀라스 파이프라인</div>
+                      </div>
+                      <div class="bg-slate-900/90 p-3 rounded-lg border border-slate-700">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xl mb-1"></i>
+                        <div class="font-bold text-slate-200">스켈레탈 모션</div>
+                        <div class="text-[10px] text-slate-400">본 리깅 및 메쉬</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Quick Floating Badge -->
+                  <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20 animate-pulse-slow">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-sm font-semibold tracking-wide">실무 프로젝트 즉시 수강생 2,400+ 돌파</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Section: 왜 AICinK 이러닝인가? -->
+    <section id="why-aicink" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+            왜 <span class="text-blue-600">AICinK</span> 이러닝인가?
+          </h2>
+          <p class="mt-3 text-slate-600 text-base">
+            실무 중심 프로젝트 기반 학습으로 결과를 만듭니다.
+          </p>
+        </div>
+
+        <!-- 6 Grid Feature Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
+          <!-- Card 1 -->
+          <div class="bg-slate-50 hover:bg-blue-50/60 p-6 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition text-center group flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 text-3xl mb-4 group-hover:scale-110 transition">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800 mb-1">게임그래픽</h3>
+            <p class="text-xs text-slate-500">실무 제작 프로세스</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-slate-50 hover:bg-blue-50/60 p-6 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition text-center group flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 text-3xl mb-4 group-hover:scale-110 transition">
+              <i class="fa-solid fa-palette"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800 mb-1">문화콘텐츠</h3>
+            <p class="text-xs text-slate-500">기획부터 제작까지</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-slate-50 hover:bg-blue-50/60 p-6 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition text-center group flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 text-3xl mb-4 group-hover:scale-110 transition">
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800 mb-1">생성형 AI</h3>
+            <p class="text-xs text-slate-500">실무 활용 교육</p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="bg-slate-50 hover:bg-blue-50/60 p-6 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition text-center group flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 text-3xl mb-4 group-hover:scale-110 transition">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800 mb-1">NCS 기반</h3>
+            <p class="text-xs text-slate-500">직무 중심 교육</p>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="bg-slate-50 hover:bg-blue-50/60 p-6 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition text-center group flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600 text-3xl mb-4 group-hover:scale-110 transition">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800 mb-1">포트폴리오</h3>
+            <p class="text-xs text-slate-500">취업용 결과물 제작</p>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="bg-slate-50 hover:bg-blue-50/60 p-6 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition text-center group flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 text-3xl mb-4 group-hover:scale-110 transition">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800 mb-1">체계적 학습</h3>
+            <p class="text-xs text-slate-500">이론+실습+프로젝트</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Courses Section: 다양한 분야의 전문 이러닝 과정 -->
+    <section id="courses" class="py-20 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+          <div>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+              다양한 분야의 <span class="text-blue-600">전문 이러닝 과정</span>
+            </h2>
+            <p class="mt-2 text-slate-600 text-base max-w-xl">
+              AICinK의 교육과정은 실무에서 바로 활용할 수 있는 스킬을 체계적으로 학습할 수 있습니다.
+            </p>
+          </div>
+          <button onclick="switchView('player')" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm transition flex items-center gap-2 shadow-sm">
+            <span>모든 과정 보기</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+
+        <!-- 4 Course Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <!-- Course Card 1 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition duration-300 flex flex-col group relative">
+            <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full z-10">인기</span>
+            <div class="h-44 bg-gradient-to-br from-purple-700 to-indigo-900 relative overflow-hidden flex items-center justify-center p-4">
+              <i class="fa-solid fa-wand-magic-sparkles text-6xl text-purple-300/40 group-hover:scale-110 transition duration-500"></i>
+              <div class="absolute inset-0 bg-black/20"></div>
+              <div class="absolute bottom-3 left-4 text-white text-sm font-semibold">캐릭터 드로잉 & AI 툴링</div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">게임캐릭터 디자인</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">캐릭터 기획, 비례 설정, 표정 연출 및 생성형 AI 도구 결합 실무 기법</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
+                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">초급~중급</span>
+                <span><i class="fa-regular fa-clock mr-1 text-slate-400"></i>10차시</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Card 2: Featured (2D 게임 그래픽 제작 - 클릭 시 설계화면 플레이어 실행) -->
+          <div onclick="switchView('player')" class="bg-white rounded-2xl overflow-hidden border-2 border-blue-500 shadow-md hover:shadow-2xl transition duration-300 flex flex-col group relative cursor-pointer ring-4 ring-blue-100">
+            <span class="absolute top-3 left-3 bg-blue-600 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full z-10 flex items-center gap-1">
+              <i class="fa-solid fa-play text-[9px]"></i> 체험 플레이어 연동
+            </span>
+            <div class="h-44 bg-gradient-to-br from-blue-700 to-sky-900 relative overflow-hidden flex items-center justify-center p-4">
+              <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-3xl group-hover:scale-110 transition duration-500 shadow-inner">
+                <i class="fa-solid fa-cubes"></i>
+              </div>
+              <div class="absolute bottom-3 left-4 text-white text-sm font-semibold">애니팡 2D 아틀라스 분석</div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1.5 text-xs text-blue-600 font-bold mb-1">
+                  <i class="fa-solid fa-circle-play"></i> 지금 바로 강의 화면 실행
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">2D 게임 그래픽 제작</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">텍스처 아틀라스 전략, 스켈레탈 애니메이션 최적화 및 2D 메쉬 구조 분석</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
+                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">초급~중급</span>
+                <span><i class="fa-regular fa-clock mr-1 text-slate-400"></i>12차시</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Card 3 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition duration-300 flex flex-col group relative">
+            <div class="h-44 bg-gradient-to-br from-teal-700 to-slate-900 relative overflow-hidden flex items-center justify-center p-4">
+              <i class="fa-solid fa-window-restore text-6xl text-teal-300/40 group-hover:scale-110 transition duration-500"></i>
+              <div class="absolute inset-0 bg-black/20"></div>
+              <div class="absolute bottom-3 left-4 text-white text-sm font-semibold">Figma & 게임 UI 시스템</div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">UI/UX 디자인 실무</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">반응형 게임 인벤토리, HUD 설계 및 사용자 인터랙션 프로토타이핑</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
+                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">초급~중급</span>
+                <span><i class="fa-regular fa-clock mr-1 text-slate-400"></i>10차시</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Card 4 -->
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition duration-300 flex flex-col group relative">
+            <span class="absolute top-3 left-3 bg-amber-500 text-slate-900 text-[11px] font-black px-2.5 py-0.5 rounded-full z-10">NEW</span>
+            <div class="h-44 bg-gradient-to-br from-slate-800 to-indigo-950 relative overflow-hidden flex items-center justify-center p-4">
+              <i class="fa-solid fa-robot text-6xl text-sky-400/40 group-hover:scale-110 transition duration-500"></i>
+              <div class="absolute inset-0 bg-black/20"></div>
+              <div class="absolute bottom-3 left-4 text-white text-sm font-semibold">Midjourney & ComfyUI 실전</div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">생성형 AI 활용 실무</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">컨셉 아트 생성, 배경 텍스처 업스케일링 및 상업적 라이선스 실무 가이드</p>
+              </div>
+              <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
+                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold">초급~고급</span>
+                <span><i class="fa-regular fa-clock mr-1 text-slate-400"></i>15차시</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Learning Environment Section: 이런 환경에서 학습합니다 -->
+    <section id="env-section" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-12">
+          이런 환경에서 <span class="text-blue-600">학습합니다</span>
+        </h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <!-- Left Checklist -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="flex items-center gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="font-bold text-slate-800 text-base">고화질 강의 영상 (4K / 60FPS)</span>
+            </div>
+
+            <div class="flex items-center gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="font-bold text-slate-800 text-base">AI 실습 중심 콘텐츠</span>
+            </div>
+
+            <div class="flex items-center gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="font-bold text-slate-800 text-base">학습자료 무제한 제공 (PSD/소스)</span>
+            </div>
+
+            <div class="flex items-center gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="font-bold text-slate-800 text-base">모바일 &amp; PC 최적화 인터페이스</span>
+            </div>
+
+            <div class="flex items-center gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="font-bold text-slate-800 text-base">학습 진도 자동 저장 &amp; 수료증</span>
+            </div>
+          </div>
+
+          <!-- Middle Mockup Showcase -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div onclick="switchView('player')" class="cursor-pointer group relative bg-slate-900 p-2 rounded-2xl shadow-2xl border-4 border-slate-800 w-full max-w-md">
+              <div class="bg-blue-900/40 rounded-lg p-3 text-white text-xs flex justify-between items-center mb-1">
+                <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-desktop text-sky-400"></i> AICinK 화면설계 플레이어</span>
+                <span class="bg-blue-600 px-2 py-0.5 rounded text-[10px] font-bold">클릭하여 열기</span>
+              </div>
+              <div class="aspect-video bg-gradient-to-br from-blue-950 to-slate-900 rounded overflow-hidden flex flex-col items-center justify-center p-4 text-center border border-blue-800">
+                <i class="fa-solid fa-circle-play text-4xl text-amber-400 mb-2 group-hover:scale-125 transition duration-300"></i>
+                <div class="text-white text-sm font-bold">애니팡으로 배우는 2D 게임 그래픽 기초</div>
+                <p class="text-[11px] text-blue-200 mt-1">2. 2D 게임 그래픽 최적화 & 구조 설계</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Stat KPI Boxes -->
+          <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+            <!-- Stat 1 -->
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-lg">
+              <div class="text-sm font-medium text-blue-100 mb-1">실습 중심 학습</div>
+              <div class="text-5xl font-black font-poppins flex items-baseline gap-1">
+                80<span class="text-2xl font-bold">%</span>
+                <i class="fa-solid fa-chart-line text-2xl text-blue-200 ml-auto"></i>
+              </div>
+              <p class="text-xs text-blue-200 mt-2">단순 시청을 넘어 브라우저 직접 실습 구현</p>
+            </div>
+
+            <!-- Stat 2 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md">
+              <div class="text-sm font-medium text-slate-500 mb-1">학습 만족도</div>
+              <div class="text-5xl font-black font-poppins text-blue-600 flex items-baseline gap-1">
+                98<span class="text-2xl font-bold">%</span>
+              </div>
+              <div class="flex text-amber-400 text-sm mt-2">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">취업준비생 및 현업 재직자 평가 기준</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Learning Process Section: AICinK 학습 프로세스 -->
+    <section id="process-section" class="py-20 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+            <span class="text-blue-600">AICinK</span> 학습 프로세스
+          </h2>
+          <p class="mt-2 text-slate-600 text-base">
+            회원가입부터 수료증 &amp; 실무 포트폴리오 완성까지 7단계 마일스톤
+          </p>
+        </div>
+
+        <!-- 7 Steps Flow -->
+        <div class="flex flex-wrap lg:flex-nowrap items-center justify-between gap-3 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+          
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-3 border border-blue-200">
+              <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">1. 회원가입</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-300 text-xs hidden lg:block"></i>
+
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-3 border border-indigo-200">
+              <i class="fa-solid fa-book-open"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">2. 과정선택</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-300 text-xs hidden lg:block"></i>
+
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl mb-3 border border-sky-200">
+              <i class="fa-solid fa-circle-play"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">3. 강의수강</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-300 text-xs hidden lg:block"></i>
+
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl mb-3 border border-teal-200">
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">4. AI 실습</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-300 text-xs hidden lg:block"></i>
+
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-3 border border-amber-200">
+              <i class="fa-solid fa-folder-closed"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">5. 프로젝트</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-300 text-xs hidden lg:block"></i>
+
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl mb-3 border border-rose-200">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">6. 평가</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-300 text-xs hidden lg:block"></i>
+
+          <div class="flex flex-col items-center text-center flex-1 min-w-[100px]">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-3 border border-emerald-200">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-800">7. 수료 &amp; 포트폴리오</span>
+          </div>
+
+        </div>
+
+        <!-- Outcome Cards: 이런 결과를 얻을 수 있습니다! -->
+        <div class="mt-16">
+          <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+            이런 결과를 얻을 수 있습니다!
+          </h3>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+              <div class="text-blue-600 text-2xl mb-2"><i class="fa-solid fa-arrow-trend-up"></i></div>
+              <div class="font-bold text-slate-800 text-sm">실무 스킬 향상</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+              <div class="text-indigo-600 text-2xl mb-2"><i class="fa-solid fa-briefcase"></i></div>
+              <div class="font-bold text-slate-800 text-sm">취업 경쟁력 강화</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+              <div class="text-teal-600 text-2xl mb-2"><i class="fa-solid fa-id-card-clip"></i></div>
+              <div class="font-bold text-slate-800 text-sm">포트폴리오 완성</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+              <div class="text-purple-600 text-2xl mb-2"><i class="fa-solid fa-brain"></i></div>
+              <div class="font-bold text-slate-800 text-sm">AI 활용 역량 강화</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center col-span-2 sm:col-span-1">
+              <div class="text-rose-600 text-2xl mb-2"><i class="fa-solid fa-rocket"></i></div>
+              <div class="font-bold text-slate-800 text-sm">프로젝트 경험</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bottom Full Banner -->
+    <section class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white py-14 border-t border-blue-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <span class="text-blue-300 text-sm font-semibold tracking-wide">AI와 디지털 크리에이티브를 배우는 가장 실무적인 방법</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1">AICinK e-Learning</h2>
+        </div>
+        <div class="flex items-center gap-4">
+          <button onclick="switchView('player')" class="px-8 py-4 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-lg rounded-xl shadow-xl transition transform hover:scale-105 flex items-center gap-3">
+            <span>지금 바로 시작하기</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portal Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-10 border-t border-slate-800 text-xs">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div>
+          <div class="text-xl font-extrabold text-white font-poppins mb-1">AICinK</div>
+          <p>© 2026 AICinK All Rights Reserved. AI-그래픽스 융합기술 연구센터</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-white transition">이용약관</a>
+          <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+          <button onclick="switchView('player')" class="text-blue-400 hover:underline">화면설계 플레이어 모드</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 2. 이러닝 화면설계 플레이어 뷰 (E-화면설계.jpg 완벽 1:1 구현 모드) -->
+  <!-- ========================================================================= -->
+  <div id="view-player" class="hidden min-h-screen bg-[#07132c] flex flex-col justify-between">
+    
+    <!-- Player Top Header -->
+    <header class="bg-[#002f7a] text-white px-6 py-3.5 flex items-center justify-between border-b border-blue-800/80 shadow-md">
+      <!-- Left Logo & Breadcrumb -->
+      <div class="flex items-center gap-6">
+        <button onclick="switchView('portal')" class="text-2xl font-black text-white tracking-tight font-poppins flex items-center gap-2 hover:opacity-90 transition">
+          <span>AICinK</span>
+        </button>
+
+        <div class="hidden md:flex items-center gap-3">
+          <span class="bg-[#0047b3] px-3.5 py-1 rounded-full text-xs font-semibold text-blue-100 border border-blue-400/30">
+            AI 및 게임 그래픽 활용 이러닝 콘텐츠 제작 실무
+          </span>
+          <span class="text-xs text-blue-200 font-medium">
+            2. 2D 게임 그래픽 최적화 &amp; 구조 설계
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Mode Badge & Exit -->
+      <div class="flex items-center gap-3">
+        <div class="bg-[#0055d2] text-white px-3.5 py-1 rounded-md text-xs font-bold flex items-center gap-1.5 shadow-sm border border-blue-400/40">
+          <i class="fa-solid fa-graduation-cap"></i> 이러닝 교육
+        </div>
+        <button onclick="switchView('portal')" class="bg-white/10 hover:bg-white/20 text-white text-xs px-3 py-1 rounded transition flex items-center gap-1">
+          <i class="fa-solid fa-arrow-left"></i> 포털로 나가기
+        </button>
+      </div>
+    </header>
+
+    <!-- Player Main Area (Sidebar + Canvas Stage) -->
+    <div class="flex-1 flex overflow-hidden">
+
+      <!-- Left Sidebar Menu -->
+      <nav class="w-64 bg-[#e8f0fe] border-r border-blue-200 flex flex-col justify-between p-3.5 select-none overflow-y-auto">
+        <div>
+          <!-- Title Box -->
+          <div class="flex items-center gap-2.5 px-3 py-2.5 mb-3 text-[#00388d] font-extrabold text-sm border-b border-blue-200">
+            <i class="fa-solid fa-table-cells-large text-base"></i>
+            <span>학습메뉴</span>
+          </div>
+
+          <!-- Step Links -->
+          <div class="space-y-1.5 text-xs font-bold text-slate-700">
+            <!-- 1. 들어가기 -->
+            <button onclick="changeChapter(1)" class="w-full text-left px-3.5 py-3 rounded-lg hover:bg-blue-100/70 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-house text-slate-500"></i>
+              <span>들어가기</span>
+            </button>
+
+            <!-- 2. 학습내용 -->
+            <button onclick="changeChapter(2)" class="w-full text-left px-3.5 py-3 rounded-lg hover:bg-blue-100/70 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-file-lines text-slate-500"></i>
+              <span>학습내용</span>
+            </button>
+
+            <!-- 3. 애니팡으로 배우는 디자인 (Active) -->
+            <button onclick="changeChapter(3)" id="menu-ch3" class="w-full text-left px-3.5 py-3 rounded-lg bg-[#0066ff] text-white shadow-md transition flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-shapes text-white"></i>
+                <span class="tracking-tight">애니팡으로 배우는 디자인</span>
+              </div>
+              <i class="fa-solid fa-caret-right text-xs"></i>
+            </button>
+
+            <!-- 4. 캐릭터&블록 해체 분석 실무 제작 프로세스 -->
+            <button onclick="changeChapter(4)" class="w-full text-left px-3.5 py-3 rounded-lg hover:bg-blue-100/70 transition flex items-center gap-2.5 leading-snug">
+              <i class="fa-solid fa-film text-slate-500"></i>
+              <span>캐릭터&amp;블록 해체 분석<br>실무 제작 프로세스</span>
+            </button>
+
+            <!-- 5. 학습정리 -->
+            <button onclick="changeChapter(5)" class="w-full text-left px-3.5 py-3 rounded-lg hover:bg-blue-100/70 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-book-open text-slate-500"></i>
+              <span>학습정리</span>
+            </button>
+
+            <!-- 6. 학습평가 -->
+            <button onclick="changeChapter(6)" class="w-full text-left px-3.5 py-3 rounded-lg hover:bg-blue-100/70 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-square-check text-slate-500"></i>
+              <span>학습평가</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Instructor Tag in Sidebar -->
+        <div class="bg-white/80 p-3 rounded-xl border border-blue-200 text-[11px] text-slate-600 mt-4">
+          <div class="font-bold text-blue-900 mb-1 flex items-center gap-1">
+            <i class="fa-solid fa-user-tie text-blue-600"></i> 담당 강사 / 수석연구원
+          </div>
+          <div class="text-slate-800 font-extrabold">JANE SSAM (제인쌤)</div>
+          <div class="text-[10px] text-slate-500">AI-그래픽스 파이프라인 수석 아키텍트</div>
+        </div>
+      </nav>
+
+      <!-- Center Learning Canvas (White Stage as in E-화면설계.jpg) -->
+      <main class="flex-1 bg-[#d8e4f8] p-4 lg:p-6 flex items-center justify-center overflow-auto">
+        <div class="w-full max-w-[1180px] bg-white rounded-2xl shadow-2xl border border-blue-200/80 overflow-hidden flex flex-col relative min-h-[580px]">
+          
+          <!-- Stage Top Blue Pill Tag -->
+          <div class="px-8 pt-6 pb-2 flex justify-between items-center">
+            <div class="bg-blue-600 text-white font-black text-sm px-4 py-1.5 rounded-r-full -ml-8 shadow-sm">
+              AICinK
+            </div>
+            <div class="text-xs text-slate-400 font-medium">
+              차시: 02 / 총 12차시
+            </div>
+          </div>
+
+          <!-- Stage Main Content Grid -->
+          <div class="px-8 pb-6 flex-1 flex flex-col justify-between">
+            
+            <!-- Top Title and Objectives Row -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  애니팡으로 배우는
+                </h2>
+                <div class="text-3xl sm:text-4xl font-black text-[#0052cc] tracking-tight mt-0.5">
+                  2D 게임 그래픽 기초 및 분석
+                </div>
+              </div>
+
+              <!-- Blue Objectives Pill Box -->
+              <div class="bg-[#f0f6ff] border border-blue-200 rounded-xl p-3.5 text-xs text-slate-800 space-y-1.5 min-w-[240px] shadow-sm">
+                <div class="flex items-center gap-2 font-bold text-blue-900">
+                  <i class="fa-solid fa-circle-check text-blue-600"></i>
+                  <span>텍스처 아틀라스 전략</span>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-blue-900">
+                  <i class="fa-solid fa-circle-check text-blue-600"></i>
+                  <span>스켈레탈 애니메이션 최적화</span>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-blue-900">
+                  <i class="fa-solid fa-circle-check text-blue-600"></i>
+                  <span>2D 메쉬 구조 분석</span>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-blue-900">
+                  <i class="fa-solid fa-circle-check text-blue-600"></i>
+                  <span>성능 향상 전략</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle Diagram: 3 Columns (Texture Atlas, Skeletal, Performance) + Instructor Illustration -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center flex-1">
+              
+              <!-- Left 3 Stage Cards Diagram (col-span-8) -->
+              <div class="lg:col-span-8 space-y-4">
+                <div class="grid grid-cols-3 gap-3.5">
+                  
+                  <!-- Card 1: 텍스처 아틀라스 -->
+                  <div class="bg-white border-2 border-blue-300 rounded-xl p-3 flex flex-col items-center text-center shadow-sm hover:border-blue-500 transition">
+                    <div class="w-full bg-[#0066ff] text-white text-[11px] font-bold py-1 rounded-md mb-3">
+                      텍스처 아틀라스
+                    </div>
+                    <!-- 4x4 Sprite Sheet Simulation -->
+                    <div class="w-24 h-24 bg-blue-950 rounded-lg p-1.5 grid grid-cols-4 gap-1 border border-blue-400/50 shadow-inner">
+                      <div class="bg-blue-600 rounded-sm"></div>
+                      <div class="bg-blue-500 rounded-sm"></div>
+                      <div class="bg-blue-600 rounded-sm"></div>
+                      <div class="bg-sky-400 rounded-sm"></div>
+                      <div class="bg-indigo-600 rounded-sm"></div>
+                      <div class="bg-blue-400 rounded-sm"></div>
+                      <div class="bg-sky-500 rounded-sm"></div>
+                      <div class="bg-blue-600 rounded-sm"></div>
+                      <div class="bg-blue-500 rounded-sm"></div>
+                      <div class="bg-blue-600 rounded-sm"></div>
+                      <div class="bg-blue-700 rounded-sm"></div>
+                      <div class="bg-sky-300 rounded-sm"></div>
+                      <div class="bg-blue-600 rounded-sm"></div>
+                      <div class="bg-indigo-500 rounded-sm"></div>
+                      <div class="bg-blue-500 rounded-sm"></div>
+                      <div class="bg-sky-400 rounded-sm"></div>
+                    </div>
+                    <span class="text-[10px] text-slate-500 mt-2 font-medium">단일 Draw Call 통합</span>
+                  </div>
+
+                  <!-- Card 2: 스켈레탈 애니메이션 (애니팡 스타일 토끼 캐릭터 메쉬) -->
+                  <div class="bg-white border-2 border-blue-300 rounded-xl p-3 flex flex-col items-center text-center shadow-sm hover:border-blue-500 transition">
+                    <div class="w-full bg-[#0066ff] text-white text-[11px] font-bold py-1 rounded-md mb-3">
+                      스켈레탈 애니메이션
+                    </div>
+                    <!-- Animated Pink Rabbit Skeleton Graphic -->
+                    <div class="w-24 h-24 bg-pink-50 rounded-lg flex items-center justify-center relative border border-pink-200 overflow-hidden">
+                      <div class="skeletal-char flex flex-col items-center cursor-pointer" onclick="triggerRabbitBounce()">
+                        <!-- Rabbit Head -->
+                        <div class="w-10 h-10 bg-rose-400 rounded-full flex items-center justify-center relative shadow-sm border border-rose-500">
+                          <!-- Ears -->
+                          <div class="absolute -top-3.5 -left-1 w-2.5 h-5 bg-rose-400 rounded-t-full border border-rose-500"></div>
+                          <div class="absolute -top-3.5 -right-1 w-2.5 h-5 bg-rose-400 rounded-t-full border border-rose-500"></div>
+                          <!-- Face Mesh Dots -->
+                          <div class="w-1 h-1 bg-white rounded-full"></div>
+                          <div class="w-1 h-1 bg-white rounded-full ml-2"></div>
+                        </div>
+                        <!-- Bones Body -->
+                        <div class="w-6 h-8 bg-rose-500 rounded-md mt-0.5 relative flex justify-center items-center">
+                          <div class="w-0.5 h-full bg-yellow-300"></div>
+                          <!-- Hands -->
+                          <div class="absolute -left-2 w-2 h-4 bg-rose-400 rounded-full"></div>
+                          <div class="absolute -right-2 w-2 h-4 bg-rose-400 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="text-[10px] text-slate-500 mt-2 font-medium">본(Bone) 기반 메쉬 제어</span>
+                  </div>
+
+                  <!-- Card 3: 성능 향상 (계측 게이지) -->
+                  <div class="bg-white border-2 border-blue-300 rounded-xl p-3 flex flex-col items-center text-center shadow-sm hover:border-blue-500 transition">
+                    <div class="w-full bg-[#0066ff] text-white text-[11px] font-bold py-1 rounded-md mb-3">
+                      성능 향상
+                    </div>
+                    <!-- Performance Speedometer -->
+                    <div class="w-24 h-24 bg-slate-900 rounded-lg flex items-center justify-center p-2 border border-slate-700 relative overflow-hidden">
+                      <!-- Gauge Circle -->
+                      <div class="w-20 h-20 rounded-full border-4 border-t-emerald-400 border-r-amber-400 border-b-rose-500 border-l-blue-400 flex items-center justify-center relative">
+                        <!-- Needle -->
+                        <div class="w-1 h-8 bg-amber-300 rounded-full needle-anim"></div>
+                        <div class="w-3 h-3 bg-white rounded-full absolute shadow"></div>
+                      </div>
+                    </div>
+                    <span class="text-[10px] text-slate-500 mt-2 font-medium">메모리 65% 절감 달성</span>
+                  </div>
+
+                </div>
+
+                <!-- Bottom Pipeline Flow (블록 디자인 해체 및 분석 -> Asset pipeline -> quote) -->
+                <div class="bg-[#f8faff] border border-blue-200 rounded-xl p-3.5 flex flex-wrap sm:flex-nowrap items-center gap-4">
+                  <!-- Tag & Icons -->
+                  <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-center">
+                      <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded mb-1">블록 디자인 해체 및 분석</span>
+                      <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass text-blue-600 text-xl"></i>
+                        <div class="grid grid-cols-2 gap-1">
+                          <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                          <div class="w-3.5 h-3.5 rounded bg-orange-500"></div>
+                          <div class="w-3.5 h-3.5 rounded bg-blue-500"></div>
+                          <div class="w-3.5 h-3.5 rounded bg-amber-400"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                  </div>
+
+                  <!-- Pipeline Cylinders -->
+                  <div class="flex items-center gap-2 flex-1 justify-center">
+                    <div class="flex items-center gap-1.5 text-xs text-blue-800 font-bold">
+                      <div class="w-7 h-9 rounded bg-blue-200 border-2 border-blue-400 shadow-sm flex items-center justify-center text-[10px]">DB</div>
+                      <i class="fa-solid fa-caret-right text-blue-400 text-xs"></i>
+                      <div class="w-7 h-9 rounded bg-blue-300 border-2 border-blue-500 shadow-sm flex items-center justify-center text-[10px]">Atlas</div>
+                      <i class="fa-solid fa-caret-right text-blue-400 text-xs"></i>
+                      <div class="w-7 h-9 rounded bg-blue-400 border-2 border-blue-600 text-white shadow-sm flex items-center justify-center text-[10px]">Engine</div>
+                    </div>
+                    <span class="text-[11px] font-mono font-bold text-slate-600 ml-2">Asset pipeline</span>
+                  </div>
+
+                  <!-- Quote Callout -->
+                  <div class="bg-white border-2 border-blue-200 rounded-xl px-3.5 py-2 text-xs text-blue-950 font-bold shadow-sm flex items-center gap-2">
+                    <span class="text-blue-600 font-serif text-lg leading-none">“</span>
+                    <span>제약을 극복하는 <strong class="text-blue-600">엔지니어의 시각</strong>을 가지세요!</span>
+                    <span class="text-blue-600 font-serif text-lg leading-none">”</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Right Instructor Illustration & Speech (col-span-4) -->
+              <div class="lg:col-span-4 flex flex-col items-center justify-center relative">
+                <!-- Speech Bubble -->
+                <div class="bg-blue-600 text-white text-xs font-semibold px-4 py-2.5 rounded-2xl rounded-br-none shadow-lg mb-2 relative max-w-[240px] text-center animate-bounce">
+                  <span>"2D 게임 스프라이트는 아틀라스 최적화가 필수입니다!"</span>
+                  <div class="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-l-transparent border-t-8 border-t-blue-600"></div>
+                </div>
+
+                <!-- Instructor Avatar (Jane Ssam) -->
+                <div class="relative w-48 h-56 bg-gradient-to-t from-blue-200/60 to-transparent rounded-full flex items-end justify-center overflow-hidden border-b-4 border-blue-600">
+                  <div class="flex flex-col items-center">
+                    <!-- Head & Hair -->
+                    <div class="w-20 h-24 bg-[#fed7aa] rounded-full relative shadow-sm border border-amber-300 flex flex-col items-center justify-center">
+                      <!-- Black sleek Hair -->
+                      <div class="absolute -top-2 inset-x-0 h-10 bg-slate-900 rounded-t-full"></div>
+                      <div class="absolute top-2 -left-1 w-3 h-14 bg-slate-900 rounded-full"></div>
+                      <div class="absolute top-2 -right-1 w-3 h-14 bg-slate-900 rounded-full"></div>
+                      <!-- Smile & Eyes -->
+                      <div class="flex gap-4 mt-2">
+                        <div class="w-2 h-1.5 bg-slate-800 rounded-full"></div>
+                        <div class="w-2 h-1.5 bg-slate-800 rounded-full"></div>
+                      </div>
+                      <div class="w-3 h-1.5 border-b-2 border-red-500 rounded-full mt-1.5"></div>
+                    </div>
+                    <!-- Body: Blue Professional Suit / Blouse -->
+                    <div class="w-36 h-28 bg-[#2563eb] rounded-t-3xl mt-0.5 relative shadow-md flex items-start justify-center pt-2">
+                      <div class="w-10 h-10 bg-white rotate-45 -mt-6 border border-slate-200"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-2 text-center">
+                  <span class="text-xs font-extrabold text-slate-800">JANE SSAM</span>
+                  <span class="text-[11px] text-blue-600 font-semibold block">크리에이티브 라이브 마스터</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </main>
+
+    </div>
+
+    <!-- Player Bottom Video Controller Bar -->
+    <footer class="bg-[#002f7a] border-t border-blue-800 text-white px-6 py-3 select-none">
+      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+        
+        <!-- Controls Left (Prev, Play/Pause, Next) -->
+        <div class="flex items-center gap-4">
+          <button onclick="changeChapter('prev')" class="text-slate-300 hover:text-white text-base transition" title="이전">
+            <i class="fa-solid fa-backward-step"></i>
+          </button>
+          <button id="btn-play" onclick="togglePlay()" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center text-sm shadow transition" title="재생/일시정지">
+            <i id="play-icon" class="fa-solid fa-play"></i>
+          </button>
+          <button onclick="changeChapter('next')" class="text-slate-300 hover:text-white text-base transition" title="다음">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+        </div>
+
+        <!-- Progress Timeline Bar (Middle) -->
+        <div class="flex-1 w-full sm:w-auto flex items-center gap-4 px-2 sm:px-6">
+          <div class="relative w-full h-2 bg-blue-950 rounded-full overflow-hidden cursor-pointer" onclick="seekVideo(event)">
+            <div id="video-progress" class="h-full bg-[#00bfff] rounded-full w-[17%] transition-all duration-300"></div>
+          </div>
+          <div class="text-xs font-mono text-blue-200 whitespace-nowrap">
+            <span id="time-current">00:13</span> / <span>01:18</span>
+          </div>
+        </div>
+
+        <!-- Controls Right (Volume, Subtitle, Settings, Fullscreen) -->
+        <div class="flex items-center gap-4 text-sm text-slate-300">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-volume-high text-xs"></i>
+            <input type="range" min="0" max="100" value="75" class="w-16 h-1 bg-blue-950 rounded appearance-none cursor-pointer accent-sky-400">
+          </div>
+          <button onclick="toggleSubtitle()" class="hover:text-white text-xs font-bold border border-slate-400/50 px-1.5 py-0.5 rounded transition" title="자막">
+            <i class="fa-solid fa-font mr-1"></i>자막
+          </button>
+          <button onclick="alert('영상 화질: 1080p Full HD (설정 완료)')" class="hover:text-white transition" title="설정">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <button onclick="toggleFullScreen()" class="hover:text-white transition" title="전체화면">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Subtitle Popup Modal -->
+  <div id="subtitle-modal" class="hidden fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/85 text-white text-sm font-semibold px-6 py-2.5 rounded-full border border-white/20 shadow-2xl z-50 transition">
+    <span class="text-amber-300 mr-2">[제인쌤]</span> "애니팡의 블록과 캐릭터 메쉬를 하나의 텍스처 아틀라스로 묶으면 렌더링 드로우콜을 획기적으로 줄일 수 있습니다."
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // 뷰 전환 함수 (portal <-> player)
+    function switchView(viewName) {
+      const portalEl = document.getElementById('view-portal');
+      const playerEl = document.getElementById('view-player');
+
+      if (viewName === 'player') {
+        portalEl.classList.add('hidden');
+        playerEl.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        playerEl.classList.add('hidden');
+        portalEl.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // 비디오 재생/정지 시뮬레이션
+    let isPlaying = false;
+    let currentSeconds = 13;
+    const totalSeconds = 78;
+    let timerInterval = null;
+
+    function togglePlay() {
+      const playIcon = document.getElementById('play-icon');
+      isPlaying = !isPlaying;
+
+      if (isPlaying) {
+        playIcon.classList.remove('fa-play');
+        playIcon.classList.add('fa-pause');
+        timerInterval = setInterval(updateTimer, 1000);
+      } else {
+        playIcon.classList.remove('fa-pause');
+        playIcon.classList.add('fa-play');
+        clearInterval(timerInterval);
+      }
+    }
+
+    function updateTimer() {
+      if (currentSeconds < totalSeconds) {
+        currentSeconds++;
+        const mins = String(Math.floor(currentSeconds / 60)).padStart(2, '0');
+        const secs = String(currentSeconds % 60).padStart(2, '0');
+        document.getElementById('time-current').textContent = `${mins}:${secs}`;
+        const pct = (currentSeconds / totalSeconds) * 100;
+        document.getElementById('video-progress').style.width = pct + '%';
+      } else {
+        togglePlay();
+      }
+    }
+
+    function seekVideo(event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const width = rect.width;
+      const pct = Math.min(Math.max(clickX / width, 0), 1);
+      currentSeconds = Math.floor(pct * totalSeconds);
+      const mins = String(Math.floor(currentSeconds / 60)).padStart(2, '0');
+      const secs = String(currentSeconds % 60).padStart(2, '0');
+      document.getElementById('time-current').textContent = `${mins}:${secs}`;
+      document.getElementById('video-progress').style.width = (pct * 100) + '%';
+    }
+
+    // 자막 토글
+    function toggleSubtitle() {
+      const modal = document.getElementById('subtitle-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    // 전체화면 토글
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // 챕터 전환 알림
+    function changeChapter(num) {
+      if (num === 'prev') {
+        alert('이전 차시로 이동합니다.');
+      } else if (num === 'next') {
+        alert('다음 실무 분석 차시로 이동합니다.');
+      } else {
+        alert(`학습 메뉴 ${num}단계로 화면이 전환되었습니다.`);
+      }
+    }
+
+    // 토끼 캐릭터 클릭 인터랙션
+    function triggerRabbitBounce() {
+      alert('🐰 스켈레탈 본(Bone) 2D 메쉬 인터랙션: 애니메이션 리깅 데이터가 정상 동기화되었습니다!');
+    }
+  </script>
+</body>
+</html>
